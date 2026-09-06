@@ -31,9 +31,20 @@ if uploaded_file is not None:
 
         st.write("Status Code:", response.status_code)
 
-        st.write("Response from n8n:")
-
         try:
-            st.json(response.json())
+            data = response.json()
+
+            answer = data.get("answer", {})
+
+            st.subheader(answer.get("title", "نتيجة تحليل الملف"))
+
+            st.write(answer.get("summary", ""))
+
+            st.subheader("أهم النقاط")
+
+            for point in answer.get("key_points", []):
+                st.write(f"• {point}")
+
         except:
+            st.error("تعذر قراءة الرد من n8n")
             st.write(response.text)
